@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique de Thés - Collection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #1a1512;
+            --bg-dark: #2d2520;
+            --bg-medium: #3d3530;
+            --bg-card: #2a2421;
+            --accent-tea: #8b7355;
+            --accent-gold: #c4a35a;
+            --accent-green: #5a7247;
+            --accent-green-light: #7a9463;
+            --text-cream: #f5f0e8;
+            --text-soft: #d4cdc4;
+            --text-muted: #9a918a;
+            --border-subtle: rgba(196, 163, 90, 0.15);
+            --border-gold: rgba(196, 163, 90, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--bg-deep);
+            min-height: 100vh;
+            color: var(--text-cream);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-deep) 100%);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.5rem 0;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+        
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .brand-icon i {
+            font-size: 1.5rem;
+            color: var(--text-cream);
+        }
+        
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-cream);
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+        
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 400;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+        
+        /* Section Title */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--text-cream);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .section-divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+            margin: 1rem auto;
+        }
+        
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-3px);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 1rem;
+            background: var(--bg-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-icon i {
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+        }
+        
+        .stat-icon.green i { color: var(--accent-green-light); }
+        .stat-icon.tea i { color: var(--accent-tea); }
+        
+        .stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-cream);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-title {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            background: var(--bg-deep);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-cream);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: var(--bg-deep);
+            border-color: var(--accent-gold);
+            color: var(--text-cream);
+            box-shadow: 0 0 0 3px rgba(196, 163, 90, 0.1);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23c4a35a' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+        }
+        
+        .form-select option {
+            background: var(--bg-dark);
+            color: var(--text-cream);
+        }
+        
+        /* Buttons */
+        .btn-primary-tea {
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-light) 100%);
+            border: none;
+            color: var(--text-cream);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-tea:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(90, 114, 71, 0.4);
+            color: var(--text-cream);
+        }
+        
+        .btn-outline-tea {
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            background: transparent;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-tea:hover {
+            background: var(--accent-gold);
+            color: var(--bg-deep);
+        }
+        
+        .btn-subtle {
+            background: var(--bg-medium);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-soft);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-subtle:hover {
+            background: var(--bg-card);
+            color: var(--text-cream);
+            border-color: var(--border-gold);
+        }
+        
+        /* Table */
+        .table-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: var(--bg-dark);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--text-cream);
+            margin: 0;
+        }
+        
+        .table {
+            margin: 0;
+            --bs-table-bg: transparent;
+            --bs-table-color: inherit;
+        }
+        
+        .table thead th {
+            background: var(--bg-medium);
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            border: none;
+            white-space: nowrap;
+        }
+        
+        .table thead th a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .table thead th a:hover {
+            color: var(--text-cream);
+        }
+        
+        .table tbody td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            vertical-align: middle;
+            color: #c4a35a !important;
+        }
+        
+        .table tbody tr {
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(196, 163, 90, 0.05);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #c4a35a !important;
+        }
+        
+        .product-origin {
+            font-size: 0.8rem;
+            color: #b8996e !important;
+        }
+        
+        /* Tea Type Badges */
+        .badge-tea {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+        
+        .badge-vert {
+            background: rgba(90, 114, 71, 0.2);
+            color: #8fb175;
+            border: 1px solid rgba(90, 114, 71, 0.3);
+        }
+        
+        .badge-noir {
+            background: rgba(60, 50, 40, 0.8);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+        }
+        
+        .badge-oolong {
+            background: rgba(180, 130, 70, 0.2);
+            color: #d4a85a;
+            border: 1px solid rgba(180, 130, 70, 0.3);
+        }
+        
+        .badge-blanc {
+            background: rgba(196, 163, 90, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(196, 163, 90, 0.5);
+        }
+        
+        .badge-pu-erh {
+            background: rgba(160, 100, 80, 0.3);
+            color: #d4a070;
+            border: 1px solid rgba(160, 100, 80, 0.6);
+        }
+        
+        /* Stock Status */
+        .stock-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .stock-ok .stock-dot { background: #8fb175; }
+        .stock-low .stock-dot { background: #d4a85a; }
+        .stock-critical .stock-dot { background: #c07565; }
+        
+        .stock-text {
+            font-size: 0.9rem;
+        }
+        
+        .stock-ok .stock-text { color: #8fb175 !important; }
+        .stock-low .stock-text { color: #d4a85a !important; }
+        .stock-critical .stock-text { color: #c07565 !important; }
+        
+        /* Price */
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #c4a35a !important;
+        }
+        
+        .price-unit {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
+        /* Action Buttons */
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            margin-right: 0.25rem;
+        }
+        
+        .btn-action:hover {
+            background: var(--bg-medium);
+            color: var(--text-cream);
+            border-color: var(--border-gold);
+        }
+        
+        .btn-action.delete:hover {
+            background: rgba(180, 90, 80, 0.2);
+            color: #c07565;
+            border-color: rgba(180, 90, 80, 0.4);
+        }
+        
+        /* Pagination */
+        .pagination-section {
+            padding: 1.5rem 2rem;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .pagination-info {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        .pagination {
+            margin: 0;
+            gap: 0.25rem;
+        }
+        
+        .page-link {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-soft);
+            padding: 0.5rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        
+        .page-link:hover {
+            background: var(--bg-medium);
+            color: var(--text-cream);
+            border-color: var(--border-gold);
+        }
+        
+        .page-item.active .page-link {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--bg-deep);
+        }
+        
+        .page-item.disabled .page-link {
+            background: transparent;
+            border-color: var(--border-subtle);
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--bg-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .empty-icon i {
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-title {
+            font-size: 1.3rem;
+            color: var(--text-cream);
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Alert */
+        .alert-tea {
+            background: rgba(90, 114, 71, 0.15);
+            border: 1px solid rgba(90, 114, 71, 0.3);
+            color: var(--accent-green-light);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+        }
+        
+        /* Modal */
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+        }
+        
+        .modal-title {
+            color: var(--text-cream);
+        }
+        
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.5;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            color: var(--text-soft);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 1.5rem;
+        }
+        
+        .btn-danger-tea {
+            background: rgba(180, 90, 80, 0.3);
+            border: 1px solid rgba(180, 90, 80, 0.5);
+            color: #e8a090;
+        }
+        
+        .btn-danger-tea:hover {
+            background: rgba(180, 90, 80, 0.5);
+            color: #fff;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border-subtle);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-title { font-size: 1.8rem; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .table-responsive { margin: 0 -1rem; }
+            .pagination-section { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/" class="brand">
+                    <div class="brand-icon">
+                        <i class="bi bi-flower2"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Maison de Thés</span>
+                        <span class="brand-tagline">L'art du thé depuis 1823</span>
+                    </div>
+                </a>
+                <a th:href="@{/nouveau}" class="btn btn-primary-tea">
+                    <i class="bi bi-plus-lg me-2"></i>Nouveau Thé
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Section Header -->
+            <div class="section-header">
+                <h1 class="section-title">Notre Collection</h1>
+                <div class="section-divider"></div>
+                <p class="section-subtitle">Découvrez notre sélection de thés d'exception</p>
+            </div>
+
+            <!-- Success Message -->
+            <div th:if="${message}" class="alert alert-tea mb-4">
+                <i class="bi bi-check-circle me-2"></i>
+                <span th:text="${message}"></span>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="stat-value" th:text="${totalReferences != null ? totalReferences : 0}">0</div>
+                    <div class="stat-label">Références</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="stat-value" th:text="${produitsEnStock != null ? produitsEnStock : 0}">0</div>
+                    <div class="stat-label">En Stock</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon tea">
+                        <i class="bi bi-currency-euro"></i>
+                    </div>
+                    <div class="stat-value" th:text="${prixMoyen != null ? #numbers.formatDecimal(prixMoyen, 1, 0) : '0'}">0</div>
+                    <div class="stat-label">Prix Moyen (€)</div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <h3 class="search-title">
+                    <i class="bi bi-funnel"></i>
+                    Filtrer la collection
+                </h3>
+                <form th:action="@{/}" method="get">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Recherche</label>
+                            <input type="text" name="recherche" th:value="${recherche}" 
+                                   class="form-control" placeholder="Nom du thé...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Type de thé</label>
+                            <select name="typeThe" class="form-select">
+                                <option value="">Tous les types</option>
+                                <option th:each="type : ${typesThe}" 
+                                        th:value="${type}" 
+                                        th:text="${type}"
+                                        th:selected="${type == typeTheFiltre}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Trier par</label>
+                            <select name="tri" class="form-select">
+                                <option value="nom" th:selected="${tri == 'nom'}">Nom</option>
+                                <option value="prix" th:selected="${tri == 'prix'}">Prix</option>
+                                <option value="quantiteStock" th:selected="${tri == 'quantiteStock'}">Stock</option>
+                                <option value="dateReception" th:selected="${tri == 'dateReception'}">Date</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end gap-2">
+                            <button type="submit" class="btn btn-primary-tea flex-grow-1">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <a th:href="@{/}" class="btn btn-subtle">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="d-flex justify-content-end mb-3">
+                <a th:href="@{/exporter-csv}" class="btn btn-outline-tea">
+                    <i class="bi bi-download me-2"></i>Exporter CSV
+                </a>
+            </div>
+
+            <!-- Table Section -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <i class="bi bi-list-ul me-2"></i>
+                        Liste des thés
+                    </h3>
+                    <span class="text-muted" th:text="${totalElements} + ' thé(s) trouvé(s)'"></span>
+                </div>
+
+                <div th:if="${not #lists.isEmpty(produits)}">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a th:href="@{/(sortBy='nom', sortDir=${sortBy == 'nom' && sortDir == 'asc' ? 'desc' : 'asc'}, recherche=${recherche}, typeThe=${typeTheFiltre})}">
+                                            Nom <i class="bi bi-arrow-down-up"></i>
+                                        </a>
+                                    </th>
+                                    <th>Type</th>
+                                    <th>
+                                        <a th:href="@{/(sortBy='prix', sortDir=${sortBy == 'prix' && sortDir == 'asc' ? 'desc' : 'asc'}, recherche=${recherche}, typeThe=${typeTheFiltre})}">
+                                            Prix <i class="bi bi-arrow-down-up"></i>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a th:href="@{/(sortBy='quantiteStock', sortDir=${sortBy == 'quantiteStock' && sortDir == 'asc' ? 'desc' : 'asc'}, recherche=${recherche}, typeThe=${typeTheFiltre})}">
+                                            Stock <i class="bi bi-arrow-down-up"></i>
+                                        </a>
+                                    </th>
+                                    <th>Réception</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="produit : ${produits}">
+                                    <td>
+                                        <div class="product-name" th:text="${produit.nom}">Nom du thé</div>
+                                        <div class="product-origin" th:text="${produit.origine}">Origine</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge-tea badge-vert" th:if="${produit.typeThe == 'Vert'}" th:text="${produit.typeThe}">Vert</span>
+                                        <span class="badge-tea badge-noir" th:if="${produit.typeThe == 'Noir'}" th:text="${produit.typeThe}">Noir</span>
+                                        <span class="badge-tea badge-oolong" th:if="${produit.typeThe == 'Oolong'}" th:text="${produit.typeThe}">Oolong</span>
+                                        <span class="badge-tea badge-blanc" th:if="${produit.typeThe == 'Blanc'}" th:text="${produit.typeThe}">Blanc</span>
+                                        <span class="badge-tea badge-pu-erh" th:if="${produit.typeThe == 'Pu-erh'}" th:text="${produit.typeThe}">Pu-erh</span>
+                                    </td>
+                                    <td>
+                                        <span class="price" th:text="${#numbers.formatDecimal(produit.prix, 1, 2)}">0.00</span>
+                                        <span class="price-unit">€</span>
+                                    </td>
+                                    <td>
+                                        <div class="stock-status stock-ok" th:if="${produit.quantiteStock > 10}">
+                                            <span class="stock-dot"></span>
+                                            <span class="stock-text" th:text="${produit.quantiteStock}">0</span>
+                                        </div>
+                                        <div class="stock-status stock-low" th:if="${produit.quantiteStock > 0 && produit.quantiteStock <= 10}">
+                                            <span class="stock-dot"></span>
+                                            <span class="stock-text" th:text="${produit.quantiteStock}">0</span>
+                                        </div>
+                                        <div class="stock-status stock-critical" th:if="${produit.quantiteStock == 0}">
+                                            <span class="stock-dot"></span>
+                                            <span class="stock-text">Épuisé</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span th:if="${produit.dateReception}" 
+                                              th:text="${#temporals.format(produit.dateReception, 'dd/MM/yyyy')}">-</span>
+                                        <span th:unless="${produit.dateReception}" class="text-muted">-</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a th:href="@{/modifier/{id}(id=${produit.id})}" 
+                                           class="btn-action" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" class="btn-action delete" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal"
+                                                th:data-id="${produit.id}"
+                                                th:data-nom="${produit.nom}"
+                                                title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-section" th:if="${totalPages > 1}">
+                        <div class="pagination-info">
+                            Page <strong th:text="${currentPage + 1}">1</strong> sur <strong th:text="${totalPages}">1</strong>
+                            — <span th:text="${totalElements}">0</span> thé(s) au total
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/(page=${currentPage - 1}, sortBy=${sortBy}, sortDir=${sortDir}, recherche=${recherche}, typeThe=${typeTheFiltre})}">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                                    <li class="page-item" th:classappend="${i == currentPage} ? 'active'"
+                                        th:if="${i < 3 || i > totalPages - 4 || (i >= currentPage - 1 && i <= currentPage + 1)}">
+                                        <a class="page-link" th:href="@{/(page=${i}, sortBy=${sortBy}, sortDir=${sortDir}, recherche=${recherche}, typeThe=${typeTheFiltre})}" th:text="${i + 1}">1</a>
+                                    </li>
+                                </th:block>
+                                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/(page=${currentPage + 1}, sortBy=${sortBy}, sortDir=${sortDir}, recherche=${recherche}, typeThe=${typeTheFiltre})}">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div th:if="${#lists.isEmpty(produits)}" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="bi bi-cup-hot"></i>
+                    </div>
+                    <h4 class="empty-title">Aucun thé trouvé</h4>
+                    <p class="empty-text">Commencez par ajouter votre premier thé à la collection.</p>
+                    <a th:href="@{/nouveau}" class="btn btn-primary-tea">
+                        <i class="bi bi-plus-lg me-2"></i>Ajouter un thé
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                <i class="bi bi-flower2 me-2"></i>
+                Maison de Thés — Gestion de la collection
+            </p>
+        </div>
+    </footer>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Confirmer la suppression
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Êtes-vous sûr de vouloir supprimer le thé <strong id="deleteProductName"></strong> ?</p>
+                    <p class="text-muted mb-0">Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle" data-bs-dismiss="modal">Annuler</button>
+                    <a id="deleteConfirmBtn" href="#" class="btn btn-danger-tea">
+                        <i class="bi bi-trash me-2"></i>Supprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteModal = document.getElementById('deleteModal');
+            if (deleteModal) {
+                deleteModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    const nom = button.getAttribute('data-nom');
+                    
+                    document.getElementById('deleteProductName').textContent = nom;
+                    document.getElementById('deleteConfirmBtn').href = '/supprimer/' + id;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
